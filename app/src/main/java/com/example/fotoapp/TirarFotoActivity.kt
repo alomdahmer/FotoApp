@@ -23,6 +23,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.os.Environment.DIRECTORY_PICTURES
 import android.os.Environment.getExternalStoragePublicDirectory
+import android.os.Vibrator
 import android.support.v4.content.FileProvider
 import android.view.View
 import android.widget.ImageView
@@ -71,14 +72,14 @@ class TirarFotoActivity : AppCompatActivity() {
             iniciarCamera()
     }
 
-
+    //cria um listener que monitora o GPS do aparelho
     fun iniciarGPS() {
         try {
             val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
             val locationListener = object : LocationListener {
                 override fun onLocationChanged(location: Location) {
-                    atualizar(location)
+                    atualizarPosicao(location)
                 }
 
                 override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
@@ -89,12 +90,12 @@ class TirarFotoActivity : AppCompatActivity() {
             }
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, locationListener)
         } catch (ex: SecurityException) {
-            Toast.makeText(this, ex.message, Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Erro de permissão do GPS", Toast.LENGTH_LONG).show()
         }
     }
 
     //método que atualizar os textViews enquanto o GPS também atualiza a posição
-    fun atualizar(l : Location){
+    fun atualizarPosicao(l : Location){
         var latPoint = l.latitude
         var lonPoint = l.longitude
         txtLatitude.setText(latPoint.toString())
@@ -141,6 +142,8 @@ class TirarFotoActivity : AppCompatActivity() {
                 val imagem = imgView
                 val bm1 = BitmapFactory.decodeStream(contentResolver.openInputStream(Uri.parse(mCurrentPhotoPath)))
                 imagem.setImageBitmap(bm1)
+                Toast.makeText(this, "Fotografia obtida com sucesso!!", Toast.LENGTH_LONG).show()
+                vibrarAparelho()
                 iniciarGPS()
             } catch (fnex: FileNotFoundException) {
                 Toast.makeText(applicationContext, "Foto não encontrada!", Toast.LENGTH_LONG).show()
@@ -152,6 +155,13 @@ class TirarFotoActivity : AppCompatActivity() {
     //executado quando a activity TirarForoActivity é inicializada
     fun tirarFoto(v : View){
         estaCameraHabilitada()
+    }
+
+    fun vibrarAparelho(){
+        var v : Vibrator
+        var tempo : Long = 2000
+        v =  getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        v.vibrate(tempo)
     }
 
 }
