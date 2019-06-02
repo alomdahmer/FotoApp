@@ -51,4 +51,9 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(i, 1)
     }
 
+    fun tiraFotoDireto(v : View){
+        val i = Intent(this, TirarFotoActivity::class.java)
+        startActivity(i)
+    }
+
 }

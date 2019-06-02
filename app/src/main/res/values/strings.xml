@@ -11,4 +11,9 @@
     <string name="login">Login do usuário</string>
     <string name="salvar">Salvar</string>
     <string name="cadastro">Cadastro</string>
+    <string name="tira_foto">TIRA FOTO DIRETO</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="salvar_coordenada">SALVAR COORDENADAS!!</string>
+    <string name="tirar_foto">Tirar Foto!!</string>
 </resources>
