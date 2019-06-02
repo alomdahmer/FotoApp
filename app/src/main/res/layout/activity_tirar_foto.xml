@@ -15,12 +15,13 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginLeft="16dp" android:layout_marginStart="16dp"
-            app:layout_constraintHorizontal_bias="1.0" android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/btnTirarFoto"/>
+            app:layout_constraintHorizontal_bias="1.0"
+            android:layout_marginTop="30dp" app:layout_constraintTop_toBottomOf="@+id/txtLongitude"
+    />
     <TextView
             android:layout_width="0dp"
             android:layout_height="33dp"
-            android:id="@+id/txtLatitude2" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"
+            android:id="@+id/txtLongitude" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             app:layout_constraintStart_toEndOf="@+id/textView2" android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp" android:layout_marginTop="16dp"
@@ -35,13 +36,15 @@
             android:textStyle="bold" android:textSize="25sp" android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@+id/lblLatitude"/>
     <ImageView
-            android:layout_width="383dp"
-            android:layout_height="252dp" tools:srcCompat="@tools:sample/avatars"
+            android:layout_width="350dp"
+            android:layout_height="281dp" tools:srcCompat="@tools:sample/avatars"
             android:id="@+id/imgView" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="16dp" android:layout_marginRight="16dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp" android:layout_marginTop="16dp"
-            app:layout_constraintTop_toTopOf="parent" android:scaleType="fitXY"/>
+            app:layout_constraintTop_toTopOf="parent" android:scaleType="fitXY"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.0"/>
     <TextView
             android:text="@string/latitude"
             android:layout_width="113dp"
@@ -56,14 +59,4 @@
             android:layout_marginRight="16dp" app:layout_constraintStart_toEndOf="@+id/lblLatitude"
             android:layout_marginLeft="16dp" android:layout_marginStart="16dp" android:hint="Latitude do GPS"
             android:textSize="25sp" android:layout_marginTop="16dp" app:layout_constraintTop_toBottomOf="@+id/imgView"/>
-    <Button
-            android:text="@string/tirar_foto"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnTirarFoto" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginLeft="16dp" android:layout_marginStart="16dp" android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/txtLatitude2" app:layout_constraintHorizontal_bias="1.0"
-            android:onClick="tirarFoto"/>
 </android.support.constraint.ConstraintLayout>

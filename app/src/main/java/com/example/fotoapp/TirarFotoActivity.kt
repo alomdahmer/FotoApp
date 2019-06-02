@@ -15,6 +15,9 @@ import android.graphics.BitmapFactory
 import android.graphics.Bitmap
 import com.example.fotoapp.R
 import android.app.Activity
+import android.content.Context
+import android.location.Location
+import android.location.LocationListener
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
@@ -35,7 +38,7 @@ class TirarFotoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tirar_foto)
         //showAlert()
-        cameraHabilitada()
+        estaCameraHabilitada()
     }
 
     private var mCurrentPhotoPath : String? = null
@@ -43,32 +46,8 @@ class TirarFotoActivity : AppCompatActivity() {
     private val REQUEST_TAKE_PHOTO = 1
 
 
-    fun localizacaoHabilitada(){
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                ActivityCompat.requestPermissions(this,  arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 1);
-            }
-            //else
-                //configurarServico();
-    }
-
-    private fun showAlert() {
-        val dialog = AlertDialog.Builder(this)
-        dialog.setTitle("Habilitar GPS")
-            .setMessage("Suas configurações de localização estão desligadas'.\nHabilite o GPS do aparelho para usar o FotoApp")
-            .setPositiveButton("Habilitar GPS", DialogInterface.OnClickListener { paramDialogInterface, paramInt ->
-                val myIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(myIntent)
-            })
-            .setNegativeButton("Cancelar", DialogInterface.OnClickListener { paramDialogInterface, paramInt ->
-
-            })
-        dialog.show()
-    }
-
     //método que verifica se há permissões para a acesso à câmera por parte da aplicação
-    private fun cameraHabilitada() {
+    private fun estaCameraHabilitada() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
             || ActivityCompat.checkSelfPermission(
                 this,
@@ -89,15 +68,45 @@ class TirarFotoActivity : AppCompatActivity() {
                 1
             )
         } else
-            abrirCamera()
+            iniciarCamera()
     }
 
-    //método executado depois de se verificar se há permissões para utilização da câmera no aparelhos celular
+
+    fun iniciarGPS() {
+        try {
+            val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+            val locationListener = object : LocationListener {
+                override fun onLocationChanged(location: Location) {
+                    atualizar(location)
+                }
+
+                override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
+
+                override fun onProviderEnabled(provider: String) {}
+
+                override fun onProviderDisabled(provider: String) {}
+            }
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, locationListener)
+        } catch (ex: SecurityException) {
+            Toast.makeText(this, ex.message, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    //método que atualizar os textViews enquanto o GPS também atualiza a posição
+    fun atualizar(l : Location){
+        var latPoint = l.latitude
+        var lonPoint = l.longitude
+        txtLatitude.setText(latPoint.toString())
+        txtLongitude.setText(lonPoint.toString())
+    }
+
+    //método executado depois de se verificar se há permissões para utilização da câmera no aparelhos celular (executado no retorno do método cameraHabilitada())
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             1 -> {
                 if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    abrirCamera()
+                    iniciarCamera()
                 } else {
                     Toast.makeText(this, "Não vai funcionar!!!", Toast.LENGTH_LONG).show()
                 }
@@ -106,7 +115,7 @@ class TirarFotoActivity : AppCompatActivity() {
         }
     }
 
-    private fun abrirCamera() {
+    private fun iniciarCamera() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (takePictureIntent.resolveActivity(packageManager) != null) {
             var photoFile: File? = null
@@ -125,12 +134,14 @@ class TirarFotoActivity : AppCompatActivity() {
         }
     }
 
+    //executado no retorno do método iniciarCamera()
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             try {
                 val imagem = imgView
                 val bm1 = BitmapFactory.decodeStream(contentResolver.openInputStream(Uri.parse(mCurrentPhotoPath)))
                 imagem.setImageBitmap(bm1)
+                iniciarGPS()
             } catch (fnex: FileNotFoundException) {
                 Toast.makeText(applicationContext, "Foto não encontrada!", Toast.LENGTH_LONG).show()
             }
@@ -138,8 +149,9 @@ class TirarFotoActivity : AppCompatActivity() {
         }
     }
 
+    //executado quando a activity TirarForoActivity é inicializada
     fun tirarFoto(v : View){
-        cameraHabilitada()
+        estaCameraHabilitada()
     }
 
 }
