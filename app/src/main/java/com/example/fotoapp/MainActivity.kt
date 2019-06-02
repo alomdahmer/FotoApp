@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         api.fazerLogin(u) {userLogado ->
             if (ckManterConectado.isChecked){
                 //a linha abaixo cria o sharedPreferences da aplicação (algo parecido com o LocalStorage do navegador)
-                //Context.MODE_PRIVATE significa que somente a aplicação terá acesso ao sharedPreferences chamado de "blog_prefs"
+                //Context.MODE_PRIVATE significa que somente a aplicação terá acesso ao sharedPreferences chamado de "fotos_prefs"
                 val prefs = getSharedPreferences("fotos_prefs", Context.MODE_PRIVATE)
                 val gson = Gson()
                 //monta o objeto do usuário logado no sharedPreferences

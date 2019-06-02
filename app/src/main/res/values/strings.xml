@@ -4,4 +4,11 @@
     <string name="titulo2">FotoApp</string>
     <string name="senha">Senha</string>
     <string name="manter_conectado">Manter Conectado</string>
+    <string name="novo_usuario">Cadastrar Usuário</string>
+    <string name="nome">Nome</string>
+    <string name="nome_usuario">Nome do Usuário</string>
+    <string name="email">E-mail do usuário</string>
+    <string name="login">Login do usuário</string>
+    <string name="salvar">Salvar</string>
+    <string name="cadastro">Cadastro</string>
 </resources>
